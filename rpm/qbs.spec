@@ -60,10 +60,7 @@ The %{name}-examples package contains example files for using %{name}.
 
 %build
 %qmake5 \
-  QBS_INSTALL_PREFIX=%{_prefix} \
-  QBS_LIBRARY_DIRNAME=%{_lib} \
-  QBS_LIBEXEC_INSTALL_DIR=%{_libdir}/%{name} \
-  QBS_RELATIVE_LIBEXEC_PATH=../%{_libdir}/%{name} \
+  QBS_INSTALL_PREFIX="/usr" \
   CONFIG+=qbs_enable_project_file_updates \
   CONFIG+=qbs_disable_rpath \
   CONFIG+=qbs_enable_unit_tests \
@@ -87,6 +84,7 @@ make install INSTALL_ROOT=%{buildroot}
 %{_libdir}/libqbs*.so.1.10
 %{_libdir}/libqbs*.so.1.10.*
 %{_datadir}/%{name}/
+%{_libexecdir}/%{name}
 %exclude %{_datadir}/%{name}/examples
 
 %files devel
