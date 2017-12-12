@@ -45,11 +45,10 @@
 
 #include <QtCore/qdir.h>
 #include <QtCore/qfileinfo.h>
+#include <QtCore/qregularexpression.h>
 
 #include <QtScript/qscriptable.h>
 #include <QtScript/qscriptengine.h>
-
-#include <regex>
 
 namespace qbs {
 namespace Internal {
@@ -272,9 +271,8 @@ QScriptValue FileInfoExtension::js_joinPaths(QScriptContext *context, QScriptEng
                 paths.append(arg);
         }
     }
-    return engine->toScriptValue(QString::fromStdString(
-                                     std::regex_replace(paths.join(QLatin1Char('/')).toStdString(),
-                                                        std::regex("/{2,}"), std::string("/"))));
+    return paths.join(QLatin1Char('/')).replace(QRegularExpression(QLatin1String("/{2,}")),
+                                                QLatin1String("/"));
 }
 
 } // namespace Internal

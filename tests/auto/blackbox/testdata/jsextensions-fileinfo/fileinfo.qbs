@@ -29,7 +29,6 @@ Product {
                 output.writeLine(FileInfo.isAbsolutePath("blubb.tar.gz"));
                 output.writeLine(FileInfo.isAbsolutePath("../blubb.tar.gz"));
                 output.writeLine(FileInfo.joinPaths("/", "tmp", "blubb.tar.gz"));
-                output.writeLine(FileInfo.joinPaths("//", "/tmp/", "/blubb.tar.gz"));
                 output.writeLine(FileInfo.path("/tmp/blubb.tar.gz"));
                 output.writeLine(FileInfo.path("/tmp/"));
                 output.writeLine(FileInfo.path("/"));

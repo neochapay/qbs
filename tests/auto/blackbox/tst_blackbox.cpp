@@ -43,12 +43,11 @@
 #include <QtCore/qjsonvalue.h>
 #include <QtCore/qlocale.h>
 #include <QtCore/qregexp.h>
+#include <QtCore/qregularexpression.h>
 #include <QtCore/qtemporarydir.h>
 #include <QtCore/qtemporaryfile.h>
 
 #include <functional>
-#include <regex>
-#include <utility>
 
 #define WAIT_FOR_NEW_TIMESTAMP() waitForNewTimestamp(testDataDir)
 
@@ -3449,7 +3448,9 @@ void TestBlackbox::jsExtensionsFileInfo()
     QVERIFY(output.exists());
     QVERIFY(output.open(QIODevice::ReadOnly));
     const QList<QByteArray> lines = output.readAll().trimmed().split('\n');
-    QCOMPARE(lines.count(), 25);
+
+    QCOMPARE(lines.count(), 23);
+
     int i = 0;
     QCOMPARE(lines.at(i++).trimmed().constData(), "blubb");
     QCOMPARE(lines.at(i++).trimmed().constData(), "/usr/bin");
@@ -3463,7 +3464,6 @@ void TestBlackbox::jsExtensionsFileInfo()
     QCOMPARE(lines.at(i++).trimmed().constData(), "true");
     QCOMPARE(lines.at(i++).trimmed().constData(), "false");
     QCOMPARE(lines.at(i++).trimmed().constData(), "false");
-    QCOMPARE(lines.at(i++).trimmed().constData(), "/tmp/blubb.tar.gz");
     QCOMPARE(lines.at(i++).trimmed().constData(), "/tmp/blubb.tar.gz");
     QCOMPARE(lines.at(i++).trimmed().constData(), "/tmp");
     QCOMPARE(lines.at(i++).trimmed().constData(), "/tmp");

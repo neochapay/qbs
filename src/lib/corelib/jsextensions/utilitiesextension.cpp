@@ -59,6 +59,7 @@
 
 #include <QtCore/qcryptographichash.h>
 #include <QtCore/qdir.h>
+#include <QtCore/qregularexpression.h>
 
 #include <QtScript/qscriptable.h>
 #include <QtScript/qscriptengine.h>

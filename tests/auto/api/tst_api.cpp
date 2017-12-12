@@ -43,6 +43,7 @@
 #include <QtCore/qeventloop.h>
 #include <QtCore/qfile.h>
 #include <QtCore/qfileinfo.h>
+#include <QtCore/qregularexpression.h>
 #include <QtCore/qscopedpointer.h>
 #include <QtCore/qstringlist.h>
 #include <QtCore/qthread.h>
@@ -53,7 +54,6 @@
 #include <algorithm>
 #include <functional>
 #include <memory>
-#include <regex>
 #include <utility>
 #include <vector>
 
@@ -1461,11 +1461,10 @@ void TestApi::linkDynamicAndStaticLibs()
     const SettingsPtr s = settings();
     const qbs::Profile buildProfile(profileName(), s.get());
     if (buildProfile.value("qbs.toolchain").toStringList().contains("gcc")) {
-        static const std::regex appLinkCmdRex(" -o [^ ]*/HelloWorld" QBS_HOST_EXE_SUFFIX " ");
+        QRegularExpression appLinkCmdRex(" -o [^ ]*/HelloWorld" QBS_HOST_EXE_SUFFIX " ");
         QString appLinkCmd;
         for (const QString &line : qAsConst(bdr.descriptionLines)) {
-            const auto ln = line.toStdString();
-            if (std::regex_search(ln, appLinkCmdRex)) {
+            if (line.contains(appLinkCmdRex)) {
                 appLinkCmd = line;
                 break;
             }
@@ -1490,11 +1489,10 @@ void TestApi::linkStaticAndDynamicLibs()
     const SettingsPtr s = settings();
     const qbs::Profile buildProfile(profileName(), s.get());
     if (buildProfile.value("qbs.toolchain").toStringList().contains("gcc")) {
-        static const std::regex appLinkCmdRex(" -o [^ ]*/HelloWorld" QBS_HOST_EXE_SUFFIX " ");
+        QRegularExpression appLinkCmdRex(" -o [^ ]*/HelloWorld" QBS_HOST_EXE_SUFFIX " ");
         QString appLinkCmd;
         for (const QString &line : qAsConst(bdr.descriptionLines)) {
-            const auto ln = line.toStdString();
-            if (std::regex_search(ln, appLinkCmdRex)) {
+            if (line.contains(appLinkCmdRex)) {
                 appLinkCmd = line;
                 break;
             }
@@ -1502,10 +1500,9 @@ void TestApi::linkStaticAndDynamicLibs()
         QVERIFY(!appLinkCmd.isEmpty());
         const auto targetOs = buildProfile.value("qbs.targetOS").toStringList();
         if (!targetOs.contains("darwin") && !targetOs.contains("windows")) {
-            const std::regex rpathLinkRex("-rpath-link=\\S*/"
-                                          + relativeProductBuildDir("dynamic2").toStdString());
-            const auto ln = appLinkCmd.toStdString();
-            QVERIFY(std::regex_search(ln, rpathLinkRex));
+            QRegularExpression rpathLinkRex(QString("-rpath-link=\\S*/")
+                                            + relativeProductBuildDir("dynamic2"));
+            QVERIFY(appLinkCmd.contains(rpathLinkRex));
         }
         QVERIFY(!appLinkCmd.contains("libstatic2.a"));
         QVERIFY(!appLinkCmd.contains("libdynamic2.so"));
